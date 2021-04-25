@@ -1,0 +1,7 @@
+::ng-deep #gridContainer {
+    height: 440px;
+}
+
+.titleForm{
+    text-align: center;
+}

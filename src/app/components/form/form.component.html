@@ -1,0 +1,56 @@
+<h2 class="titleForm">Registro de Facturas</h2>
+<hr>
+
+<form (keydown.enter)="$event.preventDefault()" (submit)="onFormSubmit($event)">
+    <dx-form #myForm
+        [formData]="invoice" 
+        labelLocation="top">
+
+        <dxi-item itemType="group" [colCount]="2">
+            <dxi-item itemType="group">
+                <dxi-item dataField="productId" [label]="{text: 'Producto'}" editorType="dxSelectBox" [editorOptions]="{ dataSource: this.productService.listProducts, valueExpr: 'id', displayExpr: 'name' }">
+                    <dxi-validation-rule type="required" message="El producto es requerido"></dxi-validation-rule>
+                </dxi-item>
+
+                <dxi-item itemType="group" [colCount]="2">
+                    <dxi-item dataField="invoiceNumber" [label]="{text: 'No. Factura'}">
+                        <dxi-validation-rule type="required" message="El no. de factura es requerido"></dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item dataField="customerId" [label]="{text: 'Cliente'}" editorType="dxSelectBox" [editorOptions]="{ dataSource: this.customerService.listCustomers, valueExpr: 'id', displayExpr: 'name' }">
+                        <dxi-validation-rule type="required" message="El cliente es requerido"></dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item dataField="purchaseDate" [label]="{text: 'Fecha Compra'}" editorType="dxDateBox" [editorOptions]="{invalidDateMessage: 'La fecha debe tener el siguiente formato: MM/dd/yyyy' }">
+                        <dxi-validation-rule type="required" message="La fecha compra es requerida"></dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item dataField="quantity" [label]="{text: 'Cantidad'}">
+                        <dxi-validation-rule type="required" message="La cantidad es requerida"></dxi-validation-rule>
+                    </dxi-item>
+                </dxi-item>
+
+                <dxi-item itemType="button" [buttonOptions]="buttonOptions"></dxi-item>
+            </dxi-item>
+        </dxi-item>  
+        
+        <dxi-item itemType="group">
+            <dx-data-grid
+                id="gridContainer"
+                [dataSource]="this.invoicesService.listInvoice"
+                [showBorders]="true"
+                [focusedRowEnabled]="true"
+                [focusedRowIndex]="0"
+                keyExpr="id"
+                (onEditingStart)="editRow($event)"
+                (onRowRemoving)="deleteRow($event)">               
+
+                <dxi-column caption="No. Factura" dataField="invoiceNumber"></dxi-column>
+                <dxi-column caption="Cantidad" dataField="quantity"></dxi-column>
+                <dxi-column caption="Fecha Compra" dataField="purchaseDate"></dxi-column>
+
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxo-editing [allowUpdating]="true" [allowDeleting]="true" mode="row"></dxo-editing>
+            </dx-data-grid>
+        </dxi-item>
+    </dx-form>
+</form>
+
